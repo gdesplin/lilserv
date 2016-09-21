@@ -1,5 +1,11 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlparse, parse_qs
+from datetime import datetime
+
+def logPathTime(c):
+	f = open('log.txt', 'a')
+	f.write("Path: %s; Time: %s \n" % (c.path, BaseHTTPRequestHandler.date_time_string(c)))
+	return
 
 class MyServer(BaseHTTPRequestHandler):
 	def do_GET(self):
@@ -7,10 +13,12 @@ class MyServer(BaseHTTPRequestHandler):
 		self.send_header('Content.Type', 'text/html')
 		self.end_headers()
 		query = parse_qs(urlparse(self.path).query)
-		if self.path.startswith == "/chickens":
+		if self.path == "/chickens":
 			self.wfile.write(bytes("<p>I like chickens<p>", "utf-8"))
+			logPathTime(self)
 		else:
 			self.wfile.write(bytes("Hello", "utf-8"))
+			logPathTime(self)
 		return
 
 	def do_POST(self):
